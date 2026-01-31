@@ -3,127 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ئازاد منهل - قورئانا پیرۆز</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Scheherazade+New:wght@700&display=swap" rel="stylesheet">
+    <title>ئازاد منهل - ڕێکا رووناهیێ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Lateef&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #d4af37;
-            --dark-green: #064e3b;
-            --light-bg: #f9fafb;
-        }
-        body {
-            font-family: 'Amiri', serif;
-            background-color: var(--light-bg);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background: linear-gradient(135deg, var(--dark-green), #065f46);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            border-bottom: 5px solid var(--gold);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .header-ayah {
-            font-family: 'Scheherazade New', serif;
-            font-size: 1.5rem;
-            color: var(--gold);
-            margin-bottom: 10px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 15px;
-        }
-        .profile-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            border: 2px solid var(--gold);
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-        .profile-card h2 { margin: 10px 0; color: var(--dark-green); }
-        .profile-card p { font-style: italic; color: #666; }
+        :root { --gold: #d4af37; --dark-green: #064e3b; --white: #ffffff; }
+        body { font-family: 'Amiri', serif; background-color: #f0f2f5; margin: 0; padding-bottom: 50px; }
+        header { background: linear-gradient(135deg, var(--dark-green), #0a3d31); color: var(--gold); text-align: center; padding: 40px 20px; border-bottom: 4px solid var(--gold); }
+        .bismillah { font-family: 'Lateef', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 10px; display: block; }
+        .container { max-width: 500px; margin: auto; padding: 15px; }
         
-        .surah-list { display: grid; gap: 15px; }
-        .surah-item {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            border-right: 5px solid var(--dark-green);
-        }
-        .surah-item:hover { transform: scale(1.02); border-right-color: var(--gold); }
+        .section-title { background: var(--gold); color: var(--dark-green); padding: 10px; border-radius: 8px; text-align: center; margin: 25px 0 15px; font-weight: bold; font-size: 1.2rem; }
         
-        .play-btn {
-            background-color: var(--dark-green);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Amiri';
-            font-weight: bold;
-        }
-        .contact-btn {
-            display: block;
-            width: 100%;
-            background: var(--gold);
-            color: white;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 30px;
-        }
+        .card { background: var(--white); border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-right: 6px solid var(--gold); transition: 0.3s; }
+        .card:hover { transform: translateY(-3px); }
+        
+        .flex-row { display: flex; justify-content: space-between; align-items: center; }
+        .play-btn { background: var(--dark-green); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; }
+        
+        .names-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .name-item { background: var(--white); text-align: center; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); font-weight: bold; color: var(--dark-green); }
+        
+        .about-section { background: var(--dark-green); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 30px; }
+        .contact-link { display: inline-block; background: var(--gold); color: var(--dark-green); padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        
+        .audio-player { position: fixed; bottom: 0; width: 100%; background: #fff; border-top: 3px solid var(--gold); padding: 10px; display: none; text-align: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-ayah">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+    <span class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span>
     <h1>مالپەرێ ئازاد منهل</h1>
+    <p>ڕێکا رووناهیێ بەرەڤ بەختەوەریێ</p>
 </header>
 
 <div class="container">
-    <div class="profile-card">
-        <h2>ئازاد منهل</h2>
-        <p>"ڕێکا رووناهیێ بەرەڤ بەختەوەریێ"</p>
-    </div>
-
-    <div class="surah-list">
-        <div class="surah-item">
-            <span>١. سۆره‌تا الفاتحة</span>
-            <button class="play-btn" onclick="playAudio('https://server6.mp3quran.net/thubti/001.mp3')">گوه لێ بگرە</button>
+    <div class="section-title">📖 قورئانا پیرۆز (دەنگ و نڤیسین)</div>
+    <div id="quran-list">
+        <div class="card flex-row">
+            <div><strong>١. سۆره‌تا الفاتحة</strong><br><small style="color:var(--dark-green)">دەنگێ قورئانێ</small></div>
+            <button class="play-btn" onclick="playAudio('https://server6.mp3quran.net/thubti/001.mp3', 'الفاتحة')">گوه لێ بگرە</button>
         </div>
-        <div class="surah-item">
-            <span>١٨. سۆره‌تا الكهف</span>
-            <button class="play-btn" onclick="playAudio('https://server6.mp3quran.net/thubti/018.mp3')">گوه لێ بگرە</button>
-        </div>
-        <div class="surah-item">
-            <span>٣٦. سۆره‌تا يس</span>
-            <button class="play-btn" onclick="playAudio('https://server6.mp3quran.net/thubti/036.mp3')">گوه لێ بگرە</button>
+        <div class="card flex-row">
+            <div><strong>١٨. سۆره‌تا الكهف</strong><br><small style="color:var(--dark-green)">دەنگێ قورئانێ</small></div>
+            <button class="play-btn" onclick="playAudio('https://server6.mp3quran.net/thubti/018.mp3', 'الكهف')">گوه لێ بگرە</button>
         </div>
     </div>
 
-    <a href="tel:07506627505" class="contact-btn">📞 پەیوەندی ب من بکە</a>
+    <div class="section-title">✨ ٩٩ ناڤێن خودێ</div>
+    <div class="names-grid" id="names-container">
+        </div>
+
+    <div class="section-title">🤲 ٢٠ دوعایێن بادینی</div>
+    <div id="duaa-list">
+        <div class="card"><strong>١. دوعایا نڤستنێ:</strong><br>خودایێ من ب ناڤێ تە ئەز دمرم و دژیم.</div>
+        <div class="card"><strong>٢. دوعایا خوارنێ:</strong><br>ب ناڤێ خودێ (بسم الله) ل دەستپێک و دوماهیێ.</div>
+        <div class="card"><strong>٣. دوعایا دایبابان:</strong><br>خودایێ من تو رەحمێ ب دایبابێن من ببەی وەک چەوا ئەز مەزن کریم.</div>
+    </div>
+
+    <div class="about-section">
+        <h3>دەربارەی من</h3>
+        <p>"خزمەتکرنا دین و مللەتی، شانازییا مەزنە."</p>
+        <p><strong>خودانێ مالپەری: ئازاد منهل</strong></p>
+        <a href="tel:07506627505" class="contact-link">📞 پەیوەندی: 07506627505</a>
+    </div>
+</div>
+
+<div class="audio-player" id="player-ui">
+    <span id="playing-title"></span>
+    <audio id="main-audio" controls style="width: 100%;"></audio>
 </div>
 
 <script>
-    let currentAudio = null;
-    function playAudio(url) {
-        if (currentAudio) { currentAudio.pause(); }
-        currentAudio = new Audio(url);
-        currentAudio.play();
+    // لیستا ناڤێن خودێ
+    const names = ["الرحمن", "الرحيم", "الملك", "القدوس", "السلام", "المؤمن", "المهيمن", "العزيز", "الجبار", "المتكبر"];
+    const container = document.getElementById('names-container');
+    names.forEach(n => {
+        let div = document.createElement('div');
+        div.className = 'name-item';
+        div.innerText = n;
+        container.appendChild(div);
+    });
+
+    function playAudio(url, title) {
+        const ui = document.getElementById('player-ui');
+        const audio = document.getElementById('main-audio');
+        const titleLabel = document.getElementById('playing-title');
+        
+        ui.style.display = 'block';
+        titleLabel.innerText = "نوکە لێددەت: " + title;
+        audio.src = url;
+        audio.play();
     }
 </script>
 
