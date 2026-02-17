@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ئازاد منهل - Islamic Smart App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --dark: #0f172a; --bg: #f1f5f9; --white: #ffffff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); margin: 0; font-family: 'Noto Naskh Arabic', serif; color: var(--dark); }
+        
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 50px 20px; text-align: center; border-radius: 0 0 50px 50px; }
+        .hero h1 { margin: 0; font-family: 'Reem Kufi', sans-serif; font-size: 35px; color: var(--gold); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; margin-top: -40px; }
+        .m-btn { background: var(--white); padding: 25px 10px; border-radius: 20px; text-align: center; font-weight: bold; box-shadow: 0 8px 15px rgba(0,0,0,0.05); border: none; font-size: 17px; cursor: pointer; }
+
+        .page { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 1000; overflow-y: auto; padding-bottom: 60px; }
+        .nav { position: sticky; top: 0; background: var(--white); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--gold); z-index: 1100; }
+        .back { background: var(--dark); color: white; border: none; padding: 8px 18px; border-radius: 10px; }
+
+        .card { background: var(--white); margin: 12px; padding: 20px; border-radius: 18px; border-right: 6px solid var(--gold); position: relative; cursor: pointer; }
+        .play-icon { position: absolute; left: 15px; top: 15px; font-size: 18px; color: var(--gold); opacity: 0.6; }
+        .ar { font-family: 'Amiri', serif; font-size: 22px; color: #111; display: block; text-align: center; line-height: 1.9; margin-bottom: 10px; }
+        .ku { font-size: 15px; color: #444; text-align: justify; display: block; line-height: 1.7; }
+        
+        .ayah { transition: 0.3s; padding: 2px 5px; border-radius: 5px; display: inline-block; }
+        .active-ayah { background: rgba(212, 175, 55, 0.3); color: #000; font-weight: bold; border-bottom: 2px solid var(--gold); }
+
+        .profile-card { background: white; margin: 20px; border-radius: 30px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .wa-btn { background: #25d366; color: white; padding: 15px 30px; border-radius: 15px; text-decoration: none; display: inline-block; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>ئازاد منهل</h1>
+    <p>بەرنامێ ئیسلامی یێ ژیر</p>
+</div>
+
+<div class="grid">
+    <button class="m-btn" onclick="openP('quran-p')">📖 قورئان</button>
+    <button class="m-btn" onclick="openP('azkar-p')">✨ زیکرێن دەنگی</button>
+    <button class="m-btn" onclick="openP('dua-p')" style="grid-column: span 2; background: #fffde7;">🤲 لیستەیا مەزنا دوعایان</button>
+    <button class="m-btn" onclick="openP('hadith-p')" style="grid-column: span 2; background: #f0f4ff;">📜 لیستەیا مەزنا فەرموودەیان</button>
+    <button class="m-btn" onclick="openP('tasbih-p')">📿 تەسبیح</button>
+    <button class="m-btn" onclick="openP('about-p')">👤 دەربارەی من</button>
+</div>
+
+<div id="quran-p" class="page"><div class="nav"><button class="back" onclick="closeP('quran-p')">زڤڕین</button><b>قورئانا پیرۆز</b><span></span></div><div id="s-list"></div></div>
+<div id="azkar-p" class="page"><div class="nav"><button class="back" onclick="closeP('azkar-p')">زڤڕین</button><b>زیکرێن دەنگی</b><span></span></div><div id="az-c"></div></div>
+<div id="dua-p" class="page"><div class="nav"><button class="back" onclick="closeP('dua-p')">زڤڕین</button><b>دوعایێن هەلبژارتی</b><span></span></div><div id="du-c"></div></div>
+<div id="hadith-p" class="page"><div class="nav"><button class="back" onclick="closeP('hadith-p')">زڤڕین</button><b>فەرموودەیێن پێغەمبەری</b><span></span></div><div id="hd-c"></div></div>
+
+<div id="tasbih-p" class="page">
+    <div class="nav"><button class="back" onclick="closeP('tasbih-p')">زڤڕین</button><b>تەسبیح</b><span onclick="resetT()" style="color:red">Reset</span></div>
+    <div style="font-size: 80px; text-align: center; margin: 50px 0; color: var(--gold);" id="t-val">0</div>
+    <button style="width: 200px; height: 200px; border-radius: 50%; background: var(--dark); color: white; border: 8px solid var(--gold); margin: 0 auto; display: block; font-size: 25px;" onclick="countT()">تەقرە</button>
+</div>
+
+<div id="about-p" class="page">
+    <div class="nav"><button class="back" onclick="closeP('about-p')">زڤڕین</button><b>دەربارەی من</b><span></span></div>
+    <div class="profile-card">
+        <h2 style="margin:0;">ئازاد منهل</h2>
+        <p style="color:var(--gold); font-weight:bold;">گەشەپێدەرێ بەرنامەی</p>
+        <p>ئەڤ بەرنامە خزمەتەکا خۆڕایە ژبۆ بڵاڤکرنا زانینا ئیسلامی.</p>
+        <div style="background:#f8fafc; padding:15px; border-radius:15px; margin:15px 0; font-weight:bold;">📞 07506627505</div>
+        <a href="https://wa.me/9647506627505" class="wa-btn">WhatsApp</a>
+    </div>
+</div>
+
+<div id="read-p" class="page">
+    <div class="nav"><button class="back" onclick="stopQ()">زڤڕین</button><b id="stitle">...</b><span></span></div>
+    <audio id="audio" controls style="width:90%; margin:10px auto; display:block;"></audio>
+    <div id="q-txt" style="padding:25px; font-size:24px; line-height:2.5; text-align:justify; font-family:'Amiri'; background:white; margin:15px; border-radius:15px;"></div>
+</div>
+
+<script>
+    function openP(id){ document.getElementById(id).style.display='block'; }
+    function closeP(id){ document.getElementById(id).style.display='none'; window.speechSynthesis.cancel(); }
+    let count=0; function countT(){ count++; document.getElementById('t-val').innerText=count; } function resetT(){ count=0; document.getElementById('t-val').innerText=0; }
+    function stopQ(){ closeP('read-p'); document.getElementById('audio').pause(); }
+
+    function speak(text) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'ar-SA';
+        window.speechSynthesis.speak(msg);
+    }
+
+    const db = {
+        azkar: [
+            {a:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ", k:"مە سپێدە کر و مولک هەمی بۆ خودێ یە."},
+            {a:"اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلا أَنْتَ", k:"خودایێ من تو پەروەردگارێ منی."},
+            {a:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", k:"پاقژی و حەمد بۆ خودێ (١٠٠ جاران)."},
+            {a:"يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ", k:"ئەی ئەوێ زیندێ و هەمیشە هەبووی ب ڕەحمەتا تە هەوارێ دکەم."}
+        ],
+        dua: [
+            {a:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً", k:"خودایێ مە خێرێ بدەیە مە د دونیا و ئاخیرەتێ دا."},
+            {a:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْجَنَّةَ وَأَعُوذُ بِكَ مِنَ النَّارِ", k:"خودایێ من ئەز داخوازا بەحشتێ دکەم و پەنایێ دبرمە بەر تە ژ ئاگری."},
+            {a:"رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ", k:"پەروەردگار ل من و دەیبابێن من ببۆره."},
+            {a:"اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", k:"خودایێ من تو یێ لێبۆری و حەز ل لێبۆرینێ دکەی ل من ببۆره."},
+            {a:"يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ", k:"ئەی گوهۆڕێ دلان دلێ من ل سەر ئایینێ خۆ جێگیر بکە."},
+            {a:"اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", k:"خودایێ من ب حەلالێ خۆ من ژ حەرامی بێ منەت بکە."},
+            {a:"رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي", k:"پەروەردگار سینگێ من فراوان بکە و کارێ من ب ساناهی بکە."},
+            {a:"اللَّهُمَّ أَجِرْنِي مِنَ النَّارِ", k:"خودایێ من من ژ ئاگرێ دۆزەخێ بپارێزە."},
+            {a:"رَبِّ زِدْنِي عِلْمًا", k:"پەروەردگار زانینا من زێدە بکە."},
+            {a:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحُزْنِ", k:"خودایێ من ئەز پەنایێ دبرمە بەر تە ژ خەم و کوڤانان."},
+            {a:"لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ", k:"چ خودا نینن ژبلی تە، تو یێ پاقژی و ئەز ژ زۆلمکاران بووم."},
+            {a:"اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا", k:"خودایێ من بەرەکەتێ بێخە د وێ ڕزقێ تە دایە مە."},
+            {a:"رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", k:"پەروەردگار ڕەحمێ ب دەیبابێن من ببە وەک چەوا ئەز یێ مەزن کریم."},
+            {a:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ", k:"خودایێ من ئەز داخوازا لێبۆرین و ساخلەمیێ دکەم."}
+        ],
+        hadith: [
+            {a:"إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ", k:"کار ب نێتان دبن."},
+            {a:"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ", k:"باشترینێ هەوە ئەو کەتێ قورئانێ فێر دبیت و خەلکی فێر دکەت."},
+            {a:"الدِّينُ النَّصِيحَةُ", k:"ئایین ئامۆژگاریە."},
+            {a:"الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ", k:"موسلمان ئەو کەسە یێ موسلمانێن دی ژ ئەزمان و دەستێن وی یێ ب سلامەت بن."},
+            {a:"تَبَسُّmُكَ فِي وَجْهِ أَخِيكَ صَدَقَةٌ", k:"کەنیا تە ل بەر دەمێ برایێ تە بۆ تە سەدەقەیە."},
+            {a:"مَنْ صَلَّى عَلَيَّ صَلَاةً صَلَّى اللَّهُ عَلَيْهِ عَشْرًا", k:"هەر کەسێ ئێک سڵاواتێ ل من بدەت، خودێ دەهـ جاران سڵاواتان ل سەر وی ددەت."},
+            {a:"لا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ", k:"کەس ژ هەوە باوەردار نابیت هەتا حەز ژ برایێ خۆ نەکەت وەک چەوا حەز ژ خۆ دکەت."},
+            {a:"مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ", k:"هەر کەسێ باوەری ب خودێ و ڕۆژا دوماهیێ هەبیت بلا خێرێ بێژیت یان بێدەنگ بیت."},
+            {a:"كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ", k:"دوو پەیڤێن سڤک ل سەر ئەزمانی و گران د تەرازیێ دا: سبحان الله وبحمده سبحان الله العظيم."},
+            {a:"مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ", k:"هەر کەسێ ب ڕێیەکێ دا بچیت بۆ زانینێ، خودێ دێ ڕێیا بەحشتێ بۆ ساناهی کەت."}
+        ]
+    };
+
+    window.onload = () => {
+        const suras = ["الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات", "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر", "المسد", "الإخلاص", "الفلق", "الناس"];
+        document.getElementById('s-list').innerHTML = suras.map((s,i)=>`<div style="padding:15px; background:white; margin:10px; border-radius:12px; box-shadow:0 2px 5px rgba(0,0,0,0.05);" onclick="loadSura(${i+1},'${s}')">${i+1}. ${s}</div>`).join('');
+        
+        const render = (id, arr) => {
+            document.getElementById(id).innerHTML = arr.map(i => `
+                <div class="card" onclick="speak('${i.a}')">
+                    <span class="play-icon">🔊</span>
+                    <span class="ar">${i.a}</span>
+                    <span class="ku">${i.k}</span>
+                </div>`).join('');
+        };
+        render('az-c', db.azkar); render('du-c', db.dua); render('hd-c', db.hadith);
+    };
+
+    async function loadSura(id, name) {
+        openP('read-p'); document.getElementById('stitle').innerText = name;
+        const txt = document.getElementById('q-txt'); txt.innerHTML = "بارکرن...";
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${id}/ar.alafasy`);
+        const d = await res.json();
+        const audio = document.getElementById('audio');
+        audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${id}.mp3`;
+        
+        let out = "";
+        d.data.ayahs.forEach((a, idx) => {
+            let sText = a.text;
+            if (id !== 1 && idx === 0) sText = sText.replace("بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "");
+            out += `<span id="a-${idx}" class="ayah">${sText} <small style="color:var(--gold)">(${a.numberInSurah})</small></span> `;
+        });
+        txt.innerHTML = out;
+
+        audio.ontimeupdate = () => {
+            const duration = audio.duration;
+            const currentTime = audio.currentTime;
+            const totalAyahs = d.data.ayahs.length;
+            const currentAyahIdx = Math.floor((currentTime / duration) * totalAyahs);
+            
+            document.querySelectorAll('.ayah').forEach(el => el.classList.remove('active-ayah'));
+            const currentEl = document.getElementById(`a-${currentAyahIdx}`);
+            if (currentEl) {
+                currentEl.classList.add('active-ayah');
+                currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
+    }
+</script>
+</body>
+</html>
